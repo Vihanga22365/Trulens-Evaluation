@@ -20,7 +20,6 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_groq import ChatGroq
 from langsmith import Client
 import os
-import PyPDF2
 
 template = """Answer the question based only on the following context:
 {context}
