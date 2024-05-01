@@ -113,7 +113,7 @@ if submitted_btn:
             read_pdf(docs_raw)
             
         except Exception as e:
-            st.error("Error : ", e)
+            st.error(e)
     
     
         
