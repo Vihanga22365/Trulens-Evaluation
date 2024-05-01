@@ -1,6 +1,5 @@
 streamlit
 pypdf
-PyPDF2
 langchain
 langchain-core 
 langchain-community 
