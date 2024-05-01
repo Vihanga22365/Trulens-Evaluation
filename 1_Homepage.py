@@ -113,7 +113,7 @@ if submitted_btn:
             read_pdf(docs_raw)
             
         except Exception as e:
-            st.error("Error: This is not a valid PDF file.")
+            st.error("Error : ", e)
     
     
         
