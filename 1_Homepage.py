@@ -23,8 +23,6 @@ import os
 import PyPDF2
 import shutil
 import stat, time
-import chromadb
-from chromadb.config import Settings
 
 
 
