@@ -22,6 +22,8 @@ from langsmith import Client
 import os
 import shutil
 import stat, time
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 
 
