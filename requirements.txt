@@ -5,6 +5,8 @@ langchain-core
 langchain-community 
 langchain-openai 
 langchain-groq 
+langchainhub
+langsmith
 trulens_eval 
 openai 
 chromadb==0.4.15

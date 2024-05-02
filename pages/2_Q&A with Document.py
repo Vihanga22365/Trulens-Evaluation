@@ -21,6 +21,10 @@ from langchain_groq import ChatGroq
 from langsmith import Client
 import os
 
+os.environ["LANGCHAIN_TRACING_V2"] = "true"
+os.environ["LANGCHAIN_ENDPOINT"] = "https://api.smith.langchain.com"
+os.environ["LANGCHAIN_PROJECT"] = "LLM Eval with Trulens"
+
 template = """Answer the question based only on the following context:
 {context}
 If you don't know the answer, just say out of scope, don't try to make up an answer.
