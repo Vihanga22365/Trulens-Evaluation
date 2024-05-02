@@ -135,6 +135,8 @@ tru_recorder = TruChain(chain,
     app_id='Chain1_ChatApplication',
     feedbacks=[f_answer_relevance, f_context_relevance, f_groundedness])
 
+
+
     
 if submitted_btn:
     question = st.session_state.question
@@ -145,3 +147,10 @@ if submitted_btn:
     rec = recording.get()
     for feedback, feedback_result in rec.wait_for_feedback_results().items():
         st.write(feedback.name, feedback_result.result)
+        
+        
+st.subheader("Context Relevancy - How relevant are the retrieved text chucks to the question? ")
+
+st.subheader("Groundedness - How factually accurate is the final generated answer?")
+
+st.subheader("Answer Relevancy - How relevant is the final generated answer to the question? ")
