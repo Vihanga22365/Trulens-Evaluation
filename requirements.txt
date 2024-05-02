@@ -11,4 +11,6 @@ chromadb==0.4.15
 pysqlite3-binary
 bs4 
 tiktoken 
+langsmith 
+langchainhub
 
