@@ -136,11 +136,8 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-col1 = st.columns(1)
-
-with col1:
-    if st.button('Homepage', key='backend_button', type="primary", use_container_width=True, help="Go to Homepage"):
-        st.switch_page("1_Homepage.py")
+if st.button('Homepage', key='backend_button', type="primary", use_container_width=True, help="Go to Homepage"):
+    st.switch_page("1_Homepage.py")
 
 st.title("Q&A with Docuemnt")
     

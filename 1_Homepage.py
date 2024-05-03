@@ -129,11 +129,8 @@ st.write("")
 st.write("")
 st.write("")
 
-col1 = st.columns(1)
-
-with col1:
-    if st.button('Q&A with Docuemnt', key='backend_button', type="primary", use_container_width=True, help="Click for Q&A with Docuemnt"):
-        st.switch_page("pages/2_Q&A with Document.py")
+if st.button('Q&A with Docuemnt', key='backend_button', type="primary", use_container_width=True, help="Click for Q&A with Docuemnt"):
+    st.switch_page("pages/2_Q&A with Document.py")
     
 
     
