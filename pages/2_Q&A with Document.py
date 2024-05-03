@@ -49,6 +49,12 @@ prompt=ChatPromptTemplate.from_template(template)
 embeddings = OpenAIEmbeddings()
 model=ChatOpenAI(model_name="gpt-4-turbo-preview",temperature=0)
 output_parser=StrOutputParser()
+chain = (
+    {"context": retriever | format_docs, "question": RunnablePassthrough()}
+    | prompt
+    | model
+    | StrOutputParser()
+    )
 
 def format_docs(docs):
     format_D="\n\n".join([d.page_content for d in docs])
