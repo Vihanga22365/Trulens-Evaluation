@@ -161,6 +161,7 @@ st.write("")
 if submitted_btn:
     question = st.session_state.question
     st.subheader("Answer",divider=False)
-    st.write(get_response(question))
+    st.markdown(get_response(question))
     results = get_evaluation_report(question)
-    st.write(results)
+    for feedback, feedback_result in results.wait_for_feedback_results().items():
+        st.markdown(feedback.name, feedback_result.result)
