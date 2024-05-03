@@ -51,7 +51,13 @@ chain = (
     | model
     | StrOutputParser()
     )
+
+
+def get_response(question):
+    response = chain.invoke(question)
+    return response
     
+
 st.set_page_config(
     page_title="Evaluate with Trulens",
     page_icon="👨‍💻",
@@ -96,6 +102,5 @@ st.write("")
     
 if submitted_btn:
     question = st.session_state.question
-    response = chain.invoke(question)
     st.subheader("Answer",divider=False)
-    st.write(response)
+    st.write(get_response(question))
