@@ -94,7 +94,6 @@ def evaluate_with_trulens(question):
     with tru_recorder as recording:
         llm_response = chain.invoke(question)
     records, feedback = tru.get_records_and_feedback(app_ids=[])
-    records.head(20)
     rec = recording.get()
     for feedback, feedback_result in rec.wait_for_feedback_results().items():
         st.write(feedback.name, feedback_result.result)
@@ -154,4 +153,4 @@ if submitted_btn:
     response = chain.invoke(question)
     st.subheader("Answer",divider=False)
     st.write(response)
-    # evaluate_with_trulens(question)
+    evaluate_with_trulens(question)
