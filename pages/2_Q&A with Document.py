@@ -136,15 +136,11 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-col1, col2 = st.columns(2)
+col1 = st.columns(1)
 
 with col1:
     if st.button('Homepage', key='backend_button', type="primary", use_container_width=True, help="Go to Homepage"):
         st.switch_page("1_Homepage.py")
-
-with col2:
-    if st.button('Evaluate with Trulens', key='frontend_button', type="primary", use_container_width=True, help="Click for Evaluate with Trulens"):
-        st.switch_page("pages/3_Evaluation with Trulens.py")
 
 st.title("Q&A with Docuemnt")
     
@@ -171,12 +167,18 @@ if submitted_btn:
     st.subheader("Evaluation Results",divider=False)
     for feedback, feedback_result in results.wait_for_feedback_results().items():
         if feedback.name == "relevance":
-            st.write("Answer Relevance:", feedback_result.result)
+            st.write("Answer Relevance")
+            st.text("How relevant is the final generated answer to the question?")
+            st.text("Answer Relevance:", feedback_result.result)
             st.write("")
         elif feedback.name == "context_relevance_with_cot_reasons":
-            st.write("Context Relevance:", feedback_result.result)
+            st.write("Context Relevance")
+            st.write("How relevant are the retrieved text chucks to the question?")
+            st.text("Context Relevance:", feedback_result.result)
             st.write("")
         elif feedback.name == "groundedness_measure_with_cot_reasons":
-            st.write("Groundedness:", feedback_result.result)
+            st.write("Groundedness")
+            st.write("How factually accurate is the final generated answer?")
+            st.text("Groundedness:", feedback_result.result)
             st.write("")
             

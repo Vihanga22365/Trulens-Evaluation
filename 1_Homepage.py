@@ -129,16 +129,11 @@ st.write("")
 st.write("")
 st.write("")
 
-col1, col2 = st.columns(2)
+col1 = st.columns(1)
 
 with col1:
     if st.button('Q&A with Docuemnt', key='backend_button', type="primary", use_container_width=True, help="Click for Q&A with Docuemnt"):
         st.switch_page("pages/2_Q&A with Document.py")
-
-with col2:
-    if st.button('Evaluate with Trulens', key='frontend_button', type="primary", use_container_width=True, help="Click for Evaluate with Trulens"):
-        st.switch_page("pages/3_Evaluation with Trulens.py")
-  
     
 
     
