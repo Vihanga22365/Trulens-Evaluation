@@ -96,6 +96,15 @@ tru_recorder = TruChain(chain,
     app_id='Chain1_ChatApplication',
     feedbacks=[f_answer_relevance, f_context_relevance, f_groundedness])
 
+def get_evaluation_report(user_question):
+    with tru_recorder as recording:
+        llm_response = chain.invoke(user_question)
+    records, feedback = tru.get_records_and_feedback(app_ids=[])
+    records.head(20)
+    rec = recording.get()
+    # for feedback, feedback_result in rec.wait_for_feedback_results().items():
+    #     st.write(feedback.name, feedback_result.result)
+
 # End Trulens
 # End Trulens
 # End Trulens
@@ -152,3 +161,4 @@ if submitted_btn:
     question = st.session_state.question
     st.subheader("Answer",divider=False)
     st.write(get_response(question))
+    get_evaluation_report(question)
