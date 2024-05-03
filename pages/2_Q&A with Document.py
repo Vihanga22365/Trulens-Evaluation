@@ -151,4 +151,4 @@ if submitted_btn:
     response = chain.invoke(question)
     st.subheader("Answer",divider=False)
     st.write(response)
-    evaluate_with_trulens(question)
+    # evaluate_with_trulens(question)
