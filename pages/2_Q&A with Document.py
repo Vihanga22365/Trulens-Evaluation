@@ -49,20 +49,10 @@ prompt=ChatPromptTemplate.from_template(template)
 embeddings = OpenAIEmbeddings()
 model=ChatOpenAI(model_name="gpt-4-turbo-preview",temperature=0)
 output_parser=StrOutputParser()
+
 def format_docs(docs):
     format_D="\n\n".join([d.page_content for d in docs])
     return format_D
-db = Chroma(persist_directory=persist_directory, embedding_function=embeddings)
-retriever = db.as_retriever(search_type="similarity", search_kwargs={"k":10})
-
-chain = (
-    {"context": retriever | format_docs, "question": RunnablePassthrough()}
-    | prompt
-    | model
-    | StrOutputParser()
-    )
-
-
 
 def evaluate_with_trulens(question):
     tru=Tru()
@@ -97,16 +87,17 @@ def evaluate_with_trulens(question):
         .aggregate(np.mean)
     )
 
-    tru_recorder = TruChain(chain,
-        app_id='Chain1_ChatApplication',
-        feedbacks=[f_answer_relevance, f_context_relevance, f_groundedness])
+    # tru_recorder = TruChain(chain,
+    #     app_id='Chain1_ChatApplication',
+    #     feedbacks=[f_answer_relevance, f_context_relevance, f_groundedness])
     
-    with tru_recorder as recording:
-        llm_response = chain.invoke(question)
-    records, feedback = tru.get_records_and_feedback(app_ids=[])
-    rec = recording.get()
-    for feedback, feedback_result in rec.wait_for_feedback_results().items():
-        st.write(feedback.name, feedback_result.result)
+    # with tru_recorder as recording:
+    #     llm_response = chain.invoke(question)
+    # records, feedback = tru.get_records_and_feedback(app_ids=[])
+    # records.head(20)
+    # rec = recording.get()
+    # for feedback, feedback_result in rec.wait_for_feedback_results().items():
+    #     st.write(feedback.name, feedback_result.result)
     
 st.set_page_config(
     page_title="Evaluate with Trulens",
@@ -163,4 +154,4 @@ if submitted_btn:
     response = chain.invoke(question)
     st.subheader("Answer",divider=False)
     st.write(response)
-    evaluate_with_trulens(question)
+    # evaluate_with_trulens(question)
