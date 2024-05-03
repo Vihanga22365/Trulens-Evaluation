@@ -163,5 +163,7 @@ if submitted_btn:
     st.subheader("Answer",divider=False)
     st.markdown(get_response(question))
     results = get_evaluation_report(question)
+    
+    st.subheader("Evaluation Results",divider=False)
     for feedback, feedback_result in results.wait_for_feedback_results().items():
-        st.markdown(feedback.name, feedback_result.result)
+        st.write(feedback.name, feedback_result.result)
