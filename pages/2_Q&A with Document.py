@@ -164,6 +164,19 @@ if submitted_btn:
     st.markdown(get_response(question))
     results = get_evaluation_report(question)
     
+    st.write("")
+    st.write("")
+    st.write("") 
+    
     st.subheader("Evaluation Results",divider=False)
     for feedback, feedback_result in results.wait_for_feedback_results().items():
-        st.write(feedback.name, feedback_result.result)
+        if feedback.name == "relevance":
+            st.write("Answer Relevance:", feedback_result.result)
+            st.write("")
+        elif feedback.name == "context_relevance_with_cot_reasons":
+            st.write("Context Relevance:", feedback_result.result)
+            st.write("")
+        elif feedback.name == "groundedness_measure_with_cot_reasons":
+            st.write("Groundedness:", feedback_result.result)
+            st.write("")
+            
