@@ -166,16 +166,16 @@ if submitted_btn:
         if feedback.name == "relevance":
             st.write("Answer Relevance")
             st.text("How relevant is the final generated answer to the question?")
-            st.write("Answer Relevance:", feedback_result.result)
+            st.text("Answer Relevance: {feedback_result.result}")
             st.write("")
         elif feedback.name == "context_relevance_with_cot_reasons":
             st.write("Context Relevance")
             st.text("How relevant are the retrieved text chucks to the question?")
-            st.write("Context Relevance:", feedback_result.result)
+            st.text("Context Relevance: {feedback_result.result}")
             st.write("")
         elif feedback.name == "groundedness_measure_with_cot_reasons":
             st.write("Groundedness")
             st.text("How factually accurate is the final generated answer?")
-            st.write("Groundedness:", feedback_result.result)
+            st.text("Groundedness: {feedback_result.result}")
             st.write("")
             
