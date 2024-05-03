@@ -19,10 +19,6 @@ from langchain_community.embeddings import OllamaEmbeddings
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_groq import ChatGroq
 from langsmith import Client
-import os
-__import__('pysqlite3')
-import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 # Start Trulens
 from trulens_eval.feedback.provider import OpenAI
@@ -30,6 +26,13 @@ from trulens_eval import Feedback
 import numpy as np
 from trulens_eval import TruChain, Tru
 # End Trulens
+
+import os
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
+
 
 os.environ["LANGCHAIN_TRACING_V2"] = "true"
 os.environ["LANGCHAIN_ENDPOINT"] = "https://api.smith.langchain.com"
