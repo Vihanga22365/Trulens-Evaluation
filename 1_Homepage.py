@@ -99,7 +99,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.title("Evaluate with Trulens")
+st.title("Evaluation of Contextual Serach")
 
 st.subheader("Upload Document",divider=False)
 
