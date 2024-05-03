@@ -39,10 +39,18 @@ prompt=ChatPromptTemplate.from_template(template)
 embeddings = OpenAIEmbeddings()
 model=ChatOpenAI(model_name="gpt-4-turbo-preview",temperature=0)
 output_parser=StrOutputParser()
-
 def format_docs(docs):
     format_D="\n\n".join([d.page_content for d in docs])
     return format_D
+
+db = Chroma(persist_directory=persist_directory, embedding_function=embeddings)
+retriever = db.as_retriever(search_type="similarity", search_kwargs={"k":10})
+chain = (
+    {"context": retriever | format_docs, "question": RunnablePassthrough()}
+    | prompt
+    | model
+    | StrOutputParser()
+    )
     
 st.set_page_config(
     page_title="Evaluate with Trulens",
