@@ -138,6 +138,7 @@ st.title("Q&A with Docuemnt")
 st.subheader("Ask the Question",divider=False)
 with st.form('qa_form'):
     st.text_input('Enter the Question', placeholder='Please Enter the Question', key = 'question')
+    uploaded_excel_file = st.file_uploader("Choose a Excel file")
     submitted_btn = st.form_submit_button("Generate the Answer", use_container_width=True, type="secondary")
     
 
@@ -149,15 +150,10 @@ if submitted_btn:
     question = st.session_state.question
     st.subheader("Answer",divider=False)
     st.markdown(get_response(question))
-    
-with st.form('eva_form'):
-    uploaded_excel_file = st.file_uploader("Choose a Excel file")
-    submitted_excel_btn = st.form_submit_button("Process Document", use_container_width=True, type="secondary")
-    
-    
-if submitted_excel_btn:
+    st.subheader("Evaluation Details",divider=False)
     if uploaded_excel_file is not None:
         qa_df = pd.read_csv(uploaded_excel_file)
         golden_set = [{"query": item["Question"], "response": item["Answer"]} for index, item in qa_df.iterrows()]
+        st.write(golden_set)
         get_evaluation_report(golden_set)
         
