@@ -78,8 +78,6 @@ grounded = Groundedness(groundedness_provider=OpenAI())
 
 def get_evaluation_report(golden_set):
     
-    print(golden_set)
-    
     f_groundtruth = Feedback(
         GroundTruthAgreement(golden_set).agreement_measure, name="Answer Correctness"
     ).on_input_output()
@@ -98,7 +96,10 @@ def get_evaluation_report(golden_set):
     
     recs = recording.records
     
+    st.markdown(f"Total Records: {recs}")
+    
     final_result = tru.get_leaderboard(app_ids=[tru_recorder.app_id])
+    st.markdown(final_result)
     return final_result
 
 # End Trulens
