@@ -78,6 +78,8 @@ grounded = Groundedness(groundedness_provider=OpenAI())
 
 def get_evaluation_report(golden_set):
     
+    print(golden_set)
+    
     f_groundtruth = Feedback(
         GroundTruthAgreement(golden_set).agreement_measure, name="Answer Correctness"
     ).on_input_output()
@@ -90,6 +92,7 @@ def get_evaluation_report(golden_set):
         for q in golden_set:
             res=chain.invoke(q['query'])
             return res
+        
         
     records, feedback = tru.get_records_and_feedback(app_ids=[])
     
