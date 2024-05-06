@@ -134,7 +134,7 @@ if st.button('Homepage', key='backend_button', type="primary", use_container_wid
 
 st.title("Q&A with Docuemnt")
     
-st.subheader("Ask the Question",divider=False)
+st.subheader("Check the Groundtruth",divider=False)
 with st.form('qa_form'):
     # st.text_input('Enter the Question', placeholder='Please Enter the Question', key = 'question')
     uploaded_excel_file = st.file_uploader("Choose a Excel file")
