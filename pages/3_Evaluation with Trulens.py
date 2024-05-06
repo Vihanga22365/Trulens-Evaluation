@@ -89,7 +89,6 @@ def get_evaluation_report(golden_set):
     with tru_recorder as recording:
         for q in golden_set:
             res=chain.invoke(q['query'])
-            return res
         
         
     records, feedback = tru.get_records_and_feedback(app_ids=[])
