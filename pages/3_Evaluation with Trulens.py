@@ -136,7 +136,7 @@ st.title("Q&A with Docuemnt")
     
 st.subheader("Ask the Question",divider=False)
 with st.form('qa_form'):
-    st.text_input('Enter the Question', placeholder='Please Enter the Question', key = 'question')
+    # st.text_input('Enter the Question', placeholder='Please Enter the Question', key = 'question')
     uploaded_excel_file = st.file_uploader("Choose a Excel file")
     submitted_btn = st.form_submit_button("Generate the Answer", use_container_width=True, type="secondary")
     
@@ -146,9 +146,9 @@ st.write("")
 st.write("") 
     
 if submitted_btn:
-    question = st.session_state.question
-    st.subheader("Answer",divider=False)
-    st.markdown(get_response(question))
+    # question = st.session_state.question
+    # st.subheader("Answer",divider=False)
+    # st.markdown(get_response(question))
     st.subheader("Evaluation Details",divider=False)
     if uploaded_excel_file is not None:
         qa_df = pd.read_csv(uploaded_excel_file)
