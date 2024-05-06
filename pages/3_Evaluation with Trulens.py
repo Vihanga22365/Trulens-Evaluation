@@ -98,7 +98,7 @@ def get_evaluation_report(golden_set):
     
     final_result = tru.get_leaderboard(app_ids=[tru_recorder.app_id])
     
-    return final_result
+    return final_result["Answer Correctness"]["ground_truth"]
 
 # End Trulens
 # End Trulens
@@ -154,7 +154,6 @@ if submitted_btn:
     if uploaded_excel_file is not None:
         qa_df = pd.read_csv(uploaded_excel_file)
         golden_set = [{"query": item["Question"], "response": item["Answer"]} for index, item in qa_df.iterrows()]
-        final_result = get_evaluation_report(golden_set)
-        answer_ground_truth = final_result["Answer Correctness"]["ground_truth"]
-        st.markdown(answer_ground_truth)
+        last_answer_g_t = get_evaluation_report(golden_set)
+        st.markdown(last_answer_g_t)
         
