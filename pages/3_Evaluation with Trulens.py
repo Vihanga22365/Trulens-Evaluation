@@ -157,5 +157,5 @@ if submitted_btn:
         qa_df = pd.read_csv(uploaded_excel_file)
         golden_set = [{"query": item["Question"], "response": item["Answer"]} for index, item in qa_df.iterrows()]
         final_result = get_evaluation_report(golden_set)
-        st.markdown(final_result)
+        st.markdown(f"Final Result {final_result}")
         
