@@ -130,7 +130,7 @@ st.write("")
 st.write("")
 
 if st.button('Q&A with Docuemnt', key='backend_button', type="primary", use_container_width=True, help="Click for Q&A with Docuemnt"):
-    st.switch_page("pages/2_Q&A with Document.py")
+    st.switch_page("pages/3_Evaluation with Trulens.py")
     
 
     

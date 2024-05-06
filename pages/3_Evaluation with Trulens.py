@@ -18,7 +18,13 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.embeddings import OllamaEmbeddings
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_groq import ChatGroq
+from langsmith import Client
 import os
+from trulens_eval.feedback.provider import OpenAI
+from trulens_eval import Feedback
+import numpy as np
+from trulens_eval import TruChain, Tru
+import pandas as pd
 __import__('pysqlite3')
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
@@ -38,7 +44,6 @@ prompt=ChatPromptTemplate.from_template(template)
 embeddings = OpenAIEmbeddings()
 model=ChatOpenAI(model_name="gpt-4-turbo-preview",temperature=0)
 output_parser=StrOutputParser()
-
 def format_docs(docs):
     format_D="\n\n".join([d.page_content for d in docs])
     return format_D
@@ -52,6 +57,55 @@ chain = (
     | StrOutputParser()
     )
 
+# Start Trulens
+# Start Trulens
+# Start Trulens
+
+tru=Tru()
+
+# Initialize provider class
+provider = OpenAI()
+
+# select context to be used in feedback. the location of context is app specific.
+from trulens_eval.app import App
+context = App.select_context(chain)
+
+from trulens_eval.feedback import Groundedness,GroundTruthAgreement
+grounded = Groundedness(groundedness_provider=OpenAI())
+# Define a groundedness feedback function
+
+
+
+def get_evaluation_report(golden_set):
+    
+    f_groundtruth = Feedback(
+        GroundTruthAgreement(golden_set).agreement_measure, name="Answer Correctness"
+    ).on_input_output()
+
+    tru_recorder = TruChain(chain,
+        app_id='ground_truth',
+        feedbacks=[f_groundtruth])
+    
+    with tru_recorder as recording:
+        for q in golden_set:
+            res=chain.invoke(q['query'])
+            return res
+        
+    records, feedback = tru.get_records_and_feedback(app_ids=[])
+    
+    recs = recording.records
+    
+    tru.get_leaderboard(app_ids=[tru_recorder.app_id])
+
+# End Trulens
+# End Trulens
+# End Trulens
+
+
+def get_response(question):
+    response = chain.invoke(question)
+    return response
+    
 
 st.set_page_config(
     page_title="Evaluate with Trulens",
@@ -73,84 +127,34 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-col1, col2 = st.columns(2)
+if st.button('Homepage', key='backend_button', type="primary", use_container_width=True, help="Go to Homepage"):
+    st.switch_page("1_Homepage.py")
 
-with col1:
-    if st.button('Homepage', key='backend_button', type="primary", use_container_width=True, help="Go to Homepage"):
-        st.switch_page("1_Homepage.py")
-
-with col2:
-    if st.button('Q&A with Docuemnt', key='qa_btn', type="primary", use_container_width=True, help="Click for Q&A with Docuemnt"):
-        st.switch_page("pages/2_Q&A with Document.py")
-
-st.title("Evaluate with Trulens")
-
+st.title("Q&A with Docuemnt")
+    
 st.subheader("Ask the Question",divider=False)
 with st.form('qa_form'):
     st.text_input('Enter the Question', placeholder='Please Enter the Question', key = 'question')
-    submitted_btn = st.form_submit_button("Evaluate", use_container_width=True, type="secondary")
+    submitted_btn = st.form_submit_button("Generate the Answer", use_container_width=True, type="secondary")
     
+
 st.write("")
 st.write("")
 st.write("") 
-
-from trulens_eval.feedback.provider import OpenAI
-from trulens_eval import Feedback
-import numpy as np
-from trulens_eval import TruChain, Tru
-
-tru=Tru()
-
-# Initialize provider class
-provider = OpenAI()
-
-# select context to be used in feedback. the location of context is app specific.
-from trulens_eval.app import App
-context = App.select_context(chain)
-
-from trulens_eval.feedback import Groundedness
-grounded = Groundedness(groundedness_provider=OpenAI())
-# Define a groundedness feedback function
-f_groundedness = (
-    Feedback(grounded.groundedness_measure_with_cot_reasons)
-    .on(context.collect()) # collect context chunks into a list
-    .on_output()
-    .aggregate(grounded.grounded_statements_aggregator)
-)
-
-# Question/answer relevance between overall question and answer.
-f_answer_relevance = (
-    Feedback(provider.relevance)
-    .on_input_output()
-)
-# Question/statement relevance between question and each context chunk.
-f_context_relevance = (
-    Feedback(provider.context_relevance_with_cot_reasons)
-    .on_input()
-    .on(context)
-    .aggregate(np.mean)
-)
-
-tru_recorder = TruChain(chain,
-    app_id='Chain1_ChatApplication',
-    feedbacks=[f_answer_relevance, f_context_relevance, f_groundedness])
-
-
-
     
 if submitted_btn:
     question = st.session_state.question
-    with tru_recorder as recording:
-        llm_response = chain.invoke(question)
-    records, feedback = tru.get_records_and_feedback(app_ids=[])
-    records.head(20)
-    rec = recording.get()
-    for feedback, feedback_result in rec.wait_for_feedback_results().items():
-        st.write(feedback.name, feedback_result.result)
+    st.subheader("Answer",divider=False)
+    st.markdown(get_response(question))
+    
+with st.form('eva_form'):
+    uploaded_excel_file = st.file_uploader("Choose a Excel file")
+    submitted_excel_btn = st.form_submit_button("Process Document", use_container_width=True, type="secondary")
+    
+    
+if submitted_excel_btn:
+    if uploaded_excel_file is not None:
+        qa_df = pd.read_csv(uploaded_excel_file)
+        golden_set = [{"query": item["Question"], "response": item["Answer"]} for index, item in qa_df.iterrows()]
+        get_evaluation_report(golden_set)
         
-        
-st.subheader("Context Relevancy - How relevant are the retrieved text chucks to the question? ")
-
-st.subheader("Groundedness - How factually accurate is the final generated answer?")
-
-st.subheader("Answer Relevancy - How relevant is the final generated answer to the question? ")
