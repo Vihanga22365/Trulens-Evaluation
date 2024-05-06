@@ -132,11 +132,11 @@ st.write("")
 col1, col2 = st.columns(2)
 
 with col1:
-    if st.button('Q&A with Docuemnt', key='backend_button', type="primary", use_container_width=True, help="Click for Evaluate"):
+    if st.button('Evaluate', key='backend_button1', type="primary", use_container_width=True, help="Click for Evaluate"):
         st.switch_page("pages/2_Q&A with Document.py")
 
 with col2:
-    if st.button('Q&A with Docuemnt', key='backend_button', type="primary", use_container_width=True, help="Click for Q&A and Evaluation"):
+    if st.button('Q&A with Evaluate', key='backend_button2', type="primary", use_container_width=True, help="Click for Q&A and Evaluation"):
         st.switch_page("pages/3_Evaluation with Trulens.py")
 
 
