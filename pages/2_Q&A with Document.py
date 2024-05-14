@@ -24,6 +24,7 @@ from trulens_eval.feedback.provider import OpenAI
 from trulens_eval import Feedback
 import numpy as np
 from trulens_eval import TruChain, Tru
+from langchain.prompts import PromptTemplate
 __import__('pysqlite3')
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
@@ -55,6 +56,49 @@ chain = (
     | model
     | StrOutputParser()
     )
+
+
+### Start Custom Metrix
+### Start Custom Metrix
+### Start Custom Metrix
+
+template2 = """**Evaluation Context:**
+
+* **Document:** {retrieved_data}
+* **Question:** {question}
+
+
+**Answer:** {answer}
+
+**Task:**
+
+Check if retrieved data is relevant to question
+Check if generated answer is relevant to question
+Check if answer is generated from retrieved data (not hallucinated)
+Come up with some evaluation metrics or accuracy to provide the user
+
+Based on the provided context and , evaluate the answer and provide a score. Explain your reasoning and areas for improvement.
+
+
+"""
+tempt = PromptTemplate.from_template(template2)
+tempt.input_variables =["answer","retrieved_data","question"]
+
+def coustom_metrix_evaluate(question):
+    answer = chain.invoke(question)
+    results=retriever.invoke(question)
+    retrived_data=format_docs(results)
+    prompt2 = tempt.format(
+        answer=answer,
+        retrieved_data=retrived_data,
+        question=question
+    )
+    response = model.invoke(prompt2)
+    return response.content
+
+### End Custom Metrix
+### End Custom Metrix
+### End Custom Metrix
 
 # Start Trulens
 # Start Trulens
@@ -113,6 +157,7 @@ def get_evaluation_report(user_question):
 
 def get_response(question):
     response = chain.invoke(question)
+    # retrived_data=retriever.invoke(question)
     return response
     
 
@@ -155,6 +200,7 @@ if submitted_btn:
     question = st.session_state.question
     st.subheader("Answer",divider=False)
     st.markdown(get_response(question))
+    st.markdown(coustom_metrix_evaluate(question))
     results = get_evaluation_report(question)
     
     st.write("")
