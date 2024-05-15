@@ -72,15 +72,15 @@ template2 = """**Evaluation Context:**
 
 **Task:**
 
-Check if retrieved data is relevant to question
-Check if generated answer is relevant to question
-Check if answer is generated from retrieved data (not hallucinated)
+Check if retrieved data is relevant to question using {retrieved_data} and {question}
+Check if generated answer is relevant to question using {answer} and {question}
+Check if answer is generated from retrieved data (not hallucinated) using {retrieved_data} and {answer}
 Come up with some evaluation metrics or accuracy to provide the user
 
-Based on the provided context and , evaluate the answer and provide a score. Explain your reasoning and areas for improvement.
-
-
+Based on the provided context , evaluate the answer and provide a score. Explain your reasoning and areas for improvement.
+Finally give me an accumulated score for the above 3 metrics.
 """
+
 tempt = PromptTemplate.from_template(template2)
 tempt.input_variables =["answer","retrieved_data","question"]
 
