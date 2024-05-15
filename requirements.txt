@@ -9,7 +9,7 @@ langchainhub
 langsmith
 trulens_eval 
 openai 
-chromadb
+chromadb==0.4.15
 pysqlite3-binary
 bs4 
 tiktoken

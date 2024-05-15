@@ -132,7 +132,7 @@ st.write("")
 col1, col2 = st.columns(2)
 
 with col1:
-    if st.button('Evaluation Metric', key='backend_button1', type="primary", use_container_width=True, help="Click for Evaluate"):
+    if st.button('Evaluation Metrics', key='backend_button1', type="primary", use_container_width=True, help="Click for Evaluate"):
         st.switch_page("pages/2_Q&A with Document.py")
 
 with col2:
