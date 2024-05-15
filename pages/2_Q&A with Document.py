@@ -62,23 +62,29 @@ chain = (
 ### Start Custom Metrix
 ### Start Custom Metrix
 
-template2 = """**Evaluation Context:**
-
-* **Document:** {retrieved_data}
-* **Question:** {question}
+template2 = """
 
 
-**Answer:** {answer}
+You are an AI assistant. Your job is to evaluate RAG pipeline and provide metrics.You are provided user question, retrieved data(context) and generated answer.
 
-**Task:**
+Document: {retrieved_data}
+Question: {question}
+Answer:  {answer}
 
-Check if retrieved data is relevant to question using {retrieved_data} and {question}
-Check if generated answer is relevant to question using {answer} and {question}
-Check if answer is generated from retrieved data (not hallucinated) using {retrieved_data} and {answer}
-Come up with some evaluation metrics or accuracy to provide the user
+Below are the tasks you have to verify and provide the evaluation metrics or accuracy for each task:
 
-Based on the provided context , evaluate the answer and provide a score. Explain your reasoning and areas for improvement.
-Finally give me an accumulated score for the above 3 metrics.
+Task1(Context Relevance): How relevant are the retrieved text chucks to the question?
+Task2(Answer Relevance): How relevant is the final generated answer to the question?
+Task3(Groundedness): How factually accurate is the final generated answer?
+
+Finally provide accumulated/overall score for above 3 tasks.
+Explain your reasoning 
+
+<Output format>
+Context Relevance: 0.8
+Answer Relevance: 0.9
+Groundedness: 0.7
+Overall score: 0.8
 """
 
 tempt = PromptTemplate.from_template(template2)
@@ -200,14 +206,14 @@ if submitted_btn:
     question = st.session_state.question
     st.subheader("Answer",divider=False)
     st.markdown(get_response(question))
-    st.markdown(coustom_metrix_evaluate(question))
+    
     results = get_evaluation_report(question)
     
     st.write("")
     st.write("")
     st.write("") 
     
-    st.subheader("Evaluation Results",divider=False)
+    st.subheader("TruLens Evaluation Results",divider=False)
     for feedback, feedback_result in results.wait_for_feedback_results().items():
         if feedback.name == "relevance":
             st.write("Answer Relevance")
@@ -224,4 +230,6 @@ if submitted_btn:
             st.text("How factually accurate is the final generated answer?")
             st.text(f"Groundedness: {feedback_result.result}")
             st.divider()
+
+    st.markdown(coustom_metrix_evaluate(question))
             
