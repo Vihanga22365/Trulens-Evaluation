@@ -190,7 +190,7 @@ st.markdown(
 if st.button('Homepage', key='backend_button', type="primary", use_container_width=True, help="Go to Homepage"):
     st.switch_page("1_Homepage.py")
 
-st.title("Q&A with Docuemnt")
+st.title("Evaluation of Contextual Serach")
     
 st.subheader("Ask the Question",divider=False)
 with st.form('qa_form'):
@@ -231,5 +231,10 @@ if submitted_btn:
             st.text(f"Groundedness: {feedback_result.result}")
             st.divider()
 
+    st.write("")
+    st.write("")
+    st.write("") 
+    
+    st.subheader("Custom Evaluation Metrics",divider=False)
     st.markdown(coustom_metrix_evaluate(question))
             
