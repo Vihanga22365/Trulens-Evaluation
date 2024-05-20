@@ -92,12 +92,10 @@ st.subheader("Check the Groundtruth",divider=False)
 answer = st.checkbox("Answer")
 question = st.checkbox("Question")
 context = st.checkbox("Context")
-agree = st.checkbox("I agree")
 prompt = st.checkbox("Prompt")
 if prompt:
-    st.write("Great!")
     st.text_input('Enter the Prompt', placeholder='Please Enter the Prompt', key = 'givenPrompt')
-submitted_btn = st.form_submit_button("Evaluate with Custom Metrics", use_container_width=True, type="secondary")
+submitted_btn = st.button("Evaluate with Custom Metrics", use_container_width=True, type="secondary")
     
 
 st.write("")
