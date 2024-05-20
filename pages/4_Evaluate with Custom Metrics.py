@@ -149,9 +149,20 @@ def assign_variables(ans, ques, cont, prompt, promptSub):
             .on(question=Select.RecordInput)
         )
         
-    return f_custom_function
-        
+    tru_recorder = TruChain(chain,
+    app_id='C',
+    feedbacks=[f_custom_function])
+
+    with tru_recorder as recording:
+        llm_response = chain.invoke(prompt)
+
+
+    tru=Tru()
+    records, feedback = tru.get_records_and_feedback(app_ids=[])
+
+    rec = recording.get()
     
+    return rec
 
     # for feedback, feedback_result in rec.wait_for_feedback_results().items():
     #     print(feedback.name, feedback_result.result)
@@ -207,23 +218,12 @@ if submitted_btn:
     prompt = st.session_state.mainPrompt
         
         
-    f_custom_function = assign_variables(ans, ques, cont, prompt, promptSub)
+    rec = assign_variables(ans, ques, cont, prompt, promptSub)
     
-    tru_recorder = TruChain(chain,
-    app_id='C',
-    feedbacks=[f_custom_function])
-
-    with tru_recorder as recording:
-        llm_response = chain.invoke(prompt)
-
-
-    tru=Tru()
-    records, feedback = tru.get_records_and_feedback(app_ids=[])
-
-    rec = recording.get()
+    st.write("aaa", rec)
     
-    for feedback, feedback_result in rec.wait_for_feedback_results().items():
-        st.write(feedback.name, feedback_result.result)
+    # for feedback, feedback_result in rec.wait_for_feedback_results().items():
+    #     st.write(feedback.name, feedback_result.result)
         
     # st.write("Answer: ", ans)
     # st.write("Question: ", ques)
