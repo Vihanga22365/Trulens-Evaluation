@@ -221,7 +221,7 @@ if submitted_btn:
     prompt = st.session_state.mainPrompt
         
         
-    rec = assign_variables(ans, ques, cont, prompt, promptSub)
+    rec = manage_variable(ans, ques, cont, prompt, promptSub)
     
     
     for feedback, feedback_result in rec.wait_for_feedback_results().items():
