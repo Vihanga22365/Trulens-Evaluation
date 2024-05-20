@@ -223,6 +223,8 @@ if submitted_btn:
         
     rec = assign_variables(ans, ques, cont, prompt, promptSub)
     
+    st.write("aaa", rec)
+    
     # for feedback, feedback_result in rec.wait_for_feedback_results().items():
     #     st.write(feedback.name, feedback_result.result)
         
