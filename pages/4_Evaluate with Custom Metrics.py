@@ -226,11 +226,11 @@ if submitted_btn:
     for feedback, feedback_result in rec.wait_for_feedback_results().items():
         st.write(feedback.name, feedback_result.result)
         
-    st.write("Answer: ", ans)
-    st.write("Question: ", ques)
-    st.write("Context: ", cont)
-    st.write("Sub Prompt: ", promptSub)
-    st.write("Main Prompt: ", prompt)
+    # st.write("Answer: ", ans)
+    # st.write("Question: ", ques)
+    # st.write("Context: ", cont)
+    # st.write("Sub Prompt: ", promptSub)
+    # st.write("Main Prompt: ", prompt)
     
     
 
