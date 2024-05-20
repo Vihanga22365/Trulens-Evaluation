@@ -69,36 +69,39 @@ st.set_page_config(
     
 )
 
-def check_cstom_metric(self, *args, **kwargs) -> float:
-    """
-    Custom feedback function to evaluate RAG using custom metric.
+class Custom_FeedBack(OpenAI):
+    def check_cstom_metric(self, *args, **kwargs) -> float:
+        """
+        Custom feedback function to evaluate RAG using custom metric.
 
-    Args:
-        *args: Any number of positional arguments.
-        **kwargs: Any number of keyword arguments.
+        Args:
+            *args: Any number of positional arguments.
+            **kwargs: Any number of keyword arguments.
+            
+
+        Returns:
+            float: A value between 0 and 1 only. 0 being "not related to the formatted_prompt" and 1 being "related to the formatted_prompt".
+        """
+
+        answer = kwargs.get('answer', '')
+        question = kwargs.get('question', '')
+        context = kwargs.get('context', '')
+        global promptSub
+
         
+        formatted_prompt =  f"Professional Prompt: {promptSub}\n"\
+                       f"where 0 is not at all related and 10 is extremely related: \n\n" \
+                       f"Return only a score between  0 to 1. do not return minus values\n"\
+                       f"Answer: {answer}\n" \
+                       f"Question: {question}\n" \
+                       f"Context: {context}\n" \
+                      
 
-    Returns:
-        float: A value between 0 and 1 only. 0 being "not related to the formatted_prompt" and 1 being "related to the formatted_prompt".
-    """
-
-    answer = kwargs.get('answer', '')
-    question = kwargs.get('question', '')
-    context = kwargs.get('context', '')
-    global promptSub
-
-    
-    formatted_prompt =  f"Professional Prompt: {promptSub}\n"\
-                    f"where 0 is not at all related and 10 is extremely related: \n\n" \
-                    f"Return only a score between  0 to 1. do not return minus values\n"\
-                    f"Answer: {answer}\n" \
-                    f"Question: {question}\n" \
-                    f"Context: {context}\n" \
-                    
-
-    
-    #professional_prompt = str.format("Check up to which extent answer data is related to.",{global prompt}," where 0 is not at all related and 10 is extremely related: \n\n Answer: {}\n Question: {}\ncontext:{}\n",answer, question,context)
-    return self.generate_score_and_reasons(system_prompt=formatted_prompt)
+        
+        #professional_prompt = str.format("Check up to which extent answer data is related to.",{global prompt}," where 0 is not at all related and 10 is extremely related: \n\n Answer: {}\n Question: {}\ncontext:{}\n",answer, question,context)
+        return self.generate_score_and_reasons(system_prompt=formatted_prompt)
+        # return formatted_prompt 
+standalone = Custom_FeedBack()
 
 def assign_variables(ans, ques, cont):
     # Simply return the provided values
@@ -112,42 +115,42 @@ def manage_variable(ans, ques, cont, prompt, promptSub):
     # Check and define f_custom_function based on variable values
     if returned_ans is not None and returned_ques is not None and returned_cont is not None:
         f_custom_function = (
-            Feedback(check_cstom_metric)
+            Feedback(standalone.check_cstom_metric)
             .on(answer=Select.RecordOutput)
             .on(question=Select.RecordInput)
             .on(context)
         )
     elif returned_ans is None and returned_ques is None and returned_cont is not None:
         f_custom_function = (
-            Feedback(check_cstom_metric)
+            Feedback(standalone.check_cstom_metric)
             .on(context)
         )
     elif returned_ans is None and returned_ques is not None and returned_cont is None:
         f_custom_function = (
-            Feedback(check_cstom_metric)
+            Feedback(standalone.check_cstom_metric)
             .on(question=Select.RecordInput)
         )
     elif returned_ans is not None and returned_ques is None and returned_cont is None:
         f_custom_function = (
-            Feedback(check_cstom_metric)
+            Feedback(standalone.check_cstom_metric)
             .on(answer=Select.RecordOutput)
         )
     elif returned_ans is None and returned_ques is not None and returned_cont is not None:
         f_custom_function = (
-            Feedback(check_cstom_metric)
+            Feedback(standalone.check_cstom_metric)
             .on(question=Select.RecordInput)
             .on(context)
         )
     elif returned_ans is not None and returned_ques is None and returned_cont is not None:
         f_custom_function = (
-            Feedback(check_cstom_metric)
+            Feedback(standalone.check_cstom_metric)
             .on(answer=Select.RecordOutput)
             .on(context)
         )
         
     elif returned_ans is not None and returned_ques is not None and returned_cont is None:
         f_custom_function = (
-            Feedback(check_cstom_metric)
+            Feedback(standalone.check_cstom_metric)
             .on(answer=Select.RecordOutput)
             .on(question=Select.RecordInput)
         )
