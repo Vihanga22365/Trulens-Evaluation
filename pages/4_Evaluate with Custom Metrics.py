@@ -85,6 +85,11 @@ if st.button('Homepage', key='backend_button', type="primary", use_container_wid
     st.switch_page("1_Homepage.py")
 
 st.title("Q&A with Docuemnt")
+
+agree = st.checkbox("I agree")
+
+if agree:
+    st.write("Great!")
     
 st.subheader("Check the Groundtruth",divider=False)
 with st.form('qa_form'):
@@ -93,6 +98,7 @@ with st.form('qa_form'):
     context = st.checkbox("Context")
     prompt = st.checkbox("Prompt")
     if prompt:
+        st.write("Great!")
         st.text_input('Enter the Prompt', placeholder='Please Enter the Prompt', key = 'givenPrompt')
     submitted_btn = st.form_submit_button("Evaluate with Custom Metrics", use_container_width=True, type="secondary")
     
