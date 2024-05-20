@@ -92,8 +92,7 @@ with st.form('qa_form'):
     question = st.checkbox("Question")
     context = st.checkbox("Context")
     prompt = st.checkbox("Prompt")
-    if prompt:
-        st.text_input('Enter the Prompt', placeholder='Please Enter the Prompt', key = 'givenPrompt')
+    st.text_input('Enter the Prompt', placeholder='Please Enter the Prompt', key = 'givenPrompt')
     submitted_btn = st.form_submit_button("Evaluate with Custom Metrics", use_container_width=True, type="secondary")
     
 
