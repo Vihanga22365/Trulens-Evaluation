@@ -59,7 +59,7 @@ chain = (
     | model
     | StrOutputParser()
     )
-
+context = App.select_context(chain)
 
 st.set_page_config(
     page_title="Evaluate with Trulens",
