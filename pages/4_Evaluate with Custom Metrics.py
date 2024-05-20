@@ -86,10 +86,10 @@ class Custom_FeedBack(OpenAI):
         answer = kwargs.get('answer', '')
         question = kwargs.get('question', '')
         context = kwargs.get('context', '')
-        global promptSub
+        global prompt
 
         
-        formatted_prompt =  f"Professional Prompt: {promptSub}\n"\
+        formatted_prompt =  f"Professional Prompt: {prompt}\n"\
                        f"where 0 is not at all related and 10 is extremely related: \n\n" \
                        f"Return only a score between  0 to 1. do not return minus values\n"\
                        f"Answer: {answer}\n" \
@@ -108,9 +108,9 @@ def assign_variables(ans, ques, cont):
     return ans, ques, cont
 
 
-def manage_variable(ans, ques, cont, prompt, promptSub):
+def manage_variable(ans, ques, cont, promptMain, promptSub):
     returned_ans, returned_ques, returned_cont = assign_variables(ans, ques, cont)
-    promptSub = promptSub
+    prompt = promptSub
 
     # Check and define f_custom_function based on variable values
     if returned_ans is not None and returned_ques is not None and returned_cont is not None:
@@ -160,7 +160,7 @@ def manage_variable(ans, ques, cont, prompt, promptSub):
     feedbacks=[f_custom_function])
 
     with tru_recorder as recording:
-        llm_response = chain.invoke(prompt)
+        llm_response = chain.invoke(promptMain)
 
 
     tru=Tru()
@@ -197,14 +197,15 @@ st.title("Evaluate with Custom Metrics")
 ans = None
 ques = None
 cont = None
-prompt = ""
+promptSubCheck = None
+promptSub = ""
     
 st.subheader("Check the Custom Metrics",divider=False)
 answer = st.checkbox("Answer")
 question = st.checkbox("Question")
 context = st.checkbox("Context")
-promptSub = st.checkbox("Prompt")
-if promptSub:
+promptSubCheck = st.checkbox("Prompt")
+if promptSubCheck:
     st.text_input("Prompt",placeholder='Please Enter the Prompt', key = 'givenPrompt')
 mainPrompt = st.text_input("RAG Questions",placeholder='Please Enter the Prompt', key = 'mainPrompt')
 
@@ -218,16 +219,14 @@ if submitted_btn:
         ques = 'ok'
     if context:
         cont = 'ok'
-    if promptSub:
+    if promptSubCheck:
         promptSub = st.session_state.givenPrompt
         
-    prompt = st.session_state.mainPrompt
+    promptMain = st.session_state.mainPrompt
         
         
-    rec = manage_variable(ans, ques, cont, prompt, promptSub)
+    rec = manage_variable(ans, ques, cont, promptMain, promptSub)
     
-    
-    st.markdown(rec.wait_for_feedback_results().items())
     
     for feedback, feedback_result in rec.wait_for_feedback_results().items():
         st.write(feedback.name, feedback_result.result)
