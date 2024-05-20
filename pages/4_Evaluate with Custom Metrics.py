@@ -227,6 +227,8 @@ if submitted_btn:
     rec = manage_variable(ans, ques, cont, prompt, promptSub)
     
     
+    st.markdown(rec)
+    
     for feedback, feedback_result in rec.wait_for_feedback_results().items():
         st.write(feedback.name, feedback_result.result)
         
