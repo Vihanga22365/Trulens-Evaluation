@@ -96,6 +96,10 @@ prompt = st.checkbox("Prompt")
 if prompt:
     st.text_input('Enter the Prompt', placeholder='Please Enter the Prompt', key = 'givenPrompt')
 submitted_btn = st.button("Evaluate with Custom Metrics", use_container_width=True, type="secondary")
+
+
+if submitted_btn: 
+    st.write("Please wait for a moment, while we evaluate the model with custom metrics")
     
 
 st.write("")
