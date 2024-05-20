@@ -88,9 +88,13 @@ st.title("Q&A with Docuemnt")
     
 st.subheader("Check the Groundtruth",divider=False)
 with st.form('qa_form'):
-    # st.text_input('Enter the Question', placeholder='Please Enter the Question', key = 'question')
-    uploaded_excel_file = st.file_uploader("Choose a Excel file")
-    submitted_btn = st.form_submit_button("Generate the Answer", use_container_width=True, type="secondary")
+    answer = st.checkbox("Answer")
+    question = st.checkbox("Question")
+    context = st.checkbox("Context")
+    prompt = st.checkbox("Prompt")
+    if prompt:
+        st.text_input('Enter the Prompt', placeholder='Please Enter the Prompt', key = 'givenPrompt')
+    submitted_btn = st.form_submit_button("Evaluate with Custom Metrics", use_container_width=True, type="secondary")
     
 
 st.write("")
