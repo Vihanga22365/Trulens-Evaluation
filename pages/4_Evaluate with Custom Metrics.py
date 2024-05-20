@@ -89,19 +89,15 @@ st.title("Q&A with Docuemnt")
 
     
 st.subheader("Check the Groundtruth",divider=False)
-with st.form('qa_form'):
-    answer = st.checkbox("Answer")
-    question = st.checkbox("Question")
-    context = st.checkbox("Context")
-    agree = st.checkbox("I agree")
-
-    if agree:
-        st.write("Great!")
-    prompt = st.checkbox("Prompt")
-    if prompt:
-        st.write("Great!")
-        st.text_input('Enter the Prompt', placeholder='Please Enter the Prompt', key = 'givenPrompt')
-    submitted_btn = st.form_submit_button("Evaluate with Custom Metrics", use_container_width=True, type="secondary")
+answer = st.checkbox("Answer")
+question = st.checkbox("Question")
+context = st.checkbox("Context")
+agree = st.checkbox("I agree")
+prompt = st.checkbox("Prompt")
+if prompt:
+    st.write("Great!")
+    st.text_input('Enter the Prompt', placeholder='Please Enter the Prompt', key = 'givenPrompt')
+submitted_btn = st.form_submit_button("Evaluate with Custom Metrics", use_container_width=True, type="secondary")
     
 
 st.write("")
