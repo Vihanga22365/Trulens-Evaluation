@@ -69,6 +69,110 @@ st.set_page_config(
     
 )
 
+class Custom_FeedBack(OpenAI):
+    def check_cstom_metric(self, *args, **kwargs) -> float:
+        """
+        Custom feedback function to evaluate RAG using custom metric.
+
+        Args:
+            *args: Any number of positional arguments.
+            **kwargs: Any number of keyword arguments.
+            
+
+        Returns:
+            float: A value between 0 and 1 only. 0 being "not related to the formatted_prompt" and 1 being "related to the formatted_prompt".
+        """
+
+        answer = kwargs.get('answer', '')
+        question = kwargs.get('question', '')
+        context = kwargs.get('context', '')
+        global prompt
+
+        
+        formatted_prompt =  f"Professional Prompt: {prompt}\n"\
+                       f"where 0 is not at all related and 10 is extremely related: \n\n" \
+                       f"Return only a score between  0 to 1. do not return minus values\n"\
+                       f"Answer: {answer}\n" \
+                       f"Question: {question}\n" \
+                       f"Context: {context}\n" \
+                      
+
+        
+        #professional_prompt = str.format("Check up to which extent answer data is related to.",{global prompt}," where 0 is not at all related and 10 is extremely related: \n\n Answer: {}\n Question: {}\ncontext:{}\n",answer, question,context)
+        return self.generate_score_and_reasons(system_prompt=formatted_prompt)
+        # return formatted_prompt 
+standalone = Custom_FeedBack()
+
+def assign_variables(ans, ques, cont):
+    returned_ans = ans
+    returned_ques = ques
+    returned_cont = cont
+
+    # Check and define f_custom_function based on variable values
+    if returned_ans is not None and returned_ques is not None and returned_cont is not None:
+        f_custom_function = (
+            Feedback(standalone.check_cstom_metric)
+            .on(answer=Select.RecordOutput)
+            .on(question=Select.RecordInput)
+            .on(context)
+        )
+    elif returned_ans is None and returned_ques is None and returned_cont is not None:
+        f_custom_function = (
+            Feedback(standalone.check_cstom_metric)
+            .on(context)
+        )
+    elif returned_ans is None and returned_ques is not None and returned_cont is None:
+        f_custom_function = (
+            Feedback(standalone.check_cstom_metric)
+            .on(question=Select.RecordInput)
+        )
+    elif returned_ans is not None and returned_ques is None and returned_cont is None:
+        f_custom_function = (
+            Feedback(standalone.check_cstom_metric)
+            .on(answer=Select.RecordOutput)
+        )
+    elif returned_ans is None and returned_ques is not None and returned_cont is not None:
+        f_custom_function = (
+            Feedback(standalone.check_cstom_metric)
+            .on(question=Select.RecordInput)
+            .on(context)
+        )
+    elif returned_ans is not None and returned_ques is None and returned_cont is not None:
+        f_custom_function = (
+            Feedback(standalone.check_cstom_metric)
+            .on(answer=Select.RecordOutput)
+            .on(context)
+        )
+        
+    elif returned_ans is not None and returned_ques is not None and returned_cont is None:
+        f_custom_function = (
+            Feedback(standalone.check_cstom_metric)
+            .on(answer=Select.RecordOutput)
+            .on(question=Select.RecordInput)
+        )
+        
+    tru_recorder = TruChain(chain,
+    app_id='C',
+    feedbacks=[f_custom_function])
+
+    with tru_recorder as recording:
+        llm_response = chain.invoke("What is non accrual loan ")
+
+
+    tru=Tru()
+    records, feedback = tru.get_records_and_feedback(app_ids=[])
+
+    rec = recording.get()
+    
+    return rec
+
+    # for feedback, feedback_result in rec.wait_for_feedback_results().items():
+    #     print(feedback.name, feedback_result.result)
+
+
+
+
+
 
 st.markdown(
     """
@@ -89,6 +193,7 @@ st.title("Q&A with Docuemnt")
 ans = None
 ques = None
 cont = None
+prompt = ""
     
 st.subheader("Check the Groundtruth",divider=False)
 answer = st.checkbox("Answer")
@@ -109,6 +214,12 @@ if submitted_btn:
         cont = 'ok'
     if prompt:
         prompt = st.session_state.givenPrompt
+        
+        
+    rec = assign_variables(ans, ques, cont, prompt)
+    
+    for feedback, feedback_result in rec.wait_for_feedback_results().items():
+        st.write(feedback.name, feedback_result.result)
         
     st.write("Answer: ", ans)
     st.write("Question: ", ques)
