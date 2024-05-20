@@ -89,12 +89,12 @@ class Custom_FeedBack(OpenAI):
         global promptSub
 
         
-        formatted_prompt =  f"Professional Prompt: {promptSub}\n"\
+        formatted_prompt =  f"Professional Prompt: {prompt}\n"\
                        f"where 0 is not at all related and 10 is extremely related: \n\n" \
                        f"Return only a score between  0 to 1. do not return minus values\n"\
-                       f"Answer: {answer}\n" \
-                       f"Question: {question}\n" \
-                       f"Context: {context}\n" \
+                       f"{answer}\n" \
+                       f" {question}\n" \
+                       f" {context}\n" \
                       
 
         
