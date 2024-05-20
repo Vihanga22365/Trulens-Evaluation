@@ -86,16 +86,17 @@ if st.button('Homepage', key='backend_button', type="primary", use_container_wid
 
 st.title("Q&A with Docuemnt")
 
-agree = st.checkbox("I agree")
 
-if agree:
-    st.write("Great!")
     
 st.subheader("Check the Groundtruth",divider=False)
 with st.form('qa_form'):
     answer = st.checkbox("Answer")
     question = st.checkbox("Question")
     context = st.checkbox("Context")
+    agree = st.checkbox("I agree")
+
+    if agree:
+        st.write("Great!")
     prompt = st.checkbox("Prompt")
     if prompt:
         st.write("Great!")
