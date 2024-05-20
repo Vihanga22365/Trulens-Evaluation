@@ -100,10 +100,13 @@ def check_cstom_metric(self, *args, **kwargs) -> float:
     #professional_prompt = str.format("Check up to which extent answer data is related to.",{global prompt}," where 0 is not at all related and 10 is extremely related: \n\n Answer: {}\n Question: {}\ncontext:{}\n",answer, question,context)
     return self.generate_score_and_reasons(system_prompt=formatted_prompt)
 
-def assign_variables(ans, ques, cont, prompt, promptSub):
-    returned_ans = ans
-    returned_ques = ques
-    returned_cont = cont
+def assign_variables(ans, ques, cont):
+    # Simply return the provided values
+    return ans, ques, cont
+
+
+def manage_variable(ans, ques, cont, prompt, promptSub):
+    returned_ans, returned_ques, returned_cont = assign_variables(ans, ques, cont)
     promptSub = promptSub
 
     # Check and define f_custom_function based on variable values
@@ -186,14 +189,14 @@ st.markdown(
 if st.button('Homepage', key='backend_button', type="primary", use_container_width=True, help="Go to Homepage"):
     st.switch_page("1_Homepage.py")
 
-st.title("Q&A with Docuemnt")
+st.title("Evaluate with Custom Metrics")
 
 ans = None
 ques = None
 cont = None
 prompt = ""
     
-st.subheader("Check the Groundtruth",divider=False)
+st.subheader("Check the Custom Metrics",divider=False)
 answer = st.checkbox("Answer")
 question = st.checkbox("Question")
 context = st.checkbox("Context")
