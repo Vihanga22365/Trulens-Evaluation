@@ -92,9 +92,9 @@ class Custom_FeedBack(OpenAI):
         formatted_prompt =  f"Professional Prompt: {promptSub}\n"\
                        f"where 0 is not at all related and 10 is extremely related: \n\n" \
                        f"Return only a score between  0 to 1. do not return minus values\n"\
-                       f"{answer}\n" \
-                       f" {question}\n" \
-                       f" {context}\n" \
+                       f"Answer: {answer}\n" \
+                       f"Question: {question}\n" \
+                       f"Context: {context}\n" \
                       
 
         
@@ -206,7 +206,7 @@ context = st.checkbox("Context")
 promptSub = st.checkbox("Prompt")
 if promptSub:
     st.text_input("Prompt",placeholder='Please Enter the Prompt', key = 'givenPrompt')
-mainPrompt = st.text_input("Main Prompt",placeholder='Please Enter the Prompt', key = 'mainPrompt')
+mainPrompt = st.text_input("RAG Questions",placeholder='Please Enter the Prompt', key = 'mainPrompt')
 
 submitted_btn = st.button("Evaluate with Custom Metrics", use_container_width=True, type="secondary")
 
