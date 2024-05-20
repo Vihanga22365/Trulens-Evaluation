@@ -86,7 +86,9 @@ if st.button('Homepage', key='backend_button', type="primary", use_container_wid
 
 st.title("Q&A with Docuemnt")
 
-
+ans = None
+ques = None
+cont = None
     
 st.subheader("Check the Groundtruth",divider=False)
 answer = st.checkbox("Answer")
@@ -94,12 +96,24 @@ question = st.checkbox("Question")
 context = st.checkbox("Context")
 prompt = st.checkbox("Prompt")
 if prompt:
-    st.text_input('Enter the Prompt', placeholder='Please Enter the Prompt', key = 'givenPrompt')
+    st.text_input(placeholder='Please Enter the Prompt', key = 'givenPrompt')
 submitted_btn = st.button("Evaluate with Custom Metrics", use_container_width=True, type="secondary")
 
 
 if submitted_btn: 
-    st.write("Please wait for a moment, while we evaluate the model with custom metrics")
+    if answer:
+        ans = 'ok'
+    if question:    
+        ques = 'ok'
+    if context:
+        cont = 'ok'
+    if prompt:
+        prompt = st.session_state.givenPrompt
+        
+    st.write("Answer: ", ans)
+    st.write("Question: ", ques)
+    st.write("Context: ", cont)
+    st.write("Prompt: ", prompt)
     
 
 st.write("")
