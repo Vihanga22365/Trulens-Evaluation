@@ -86,10 +86,10 @@ class Custom_FeedBack(OpenAI):
         answer = kwargs.get('answer', '')
         question = kwargs.get('question', '')
         context = kwargs.get('context', '')
-        global prompt
+        global promptSub
 
         
-        formatted_prompt =  f"Professional Prompt: {prompt}\n"\
+        formatted_prompt =  f"Professional Prompt: {promptSub}\n"\
                        f"where 0 is not at all related and 10 is extremely related: \n\n" \
                        f"Return only a score between  0 to 1. do not return minus values\n"\
                        f"Answer: {answer}\n" \
@@ -103,10 +103,11 @@ class Custom_FeedBack(OpenAI):
         # return formatted_prompt 
 standalone = Custom_FeedBack()
 
-def assign_variables(ans, ques, cont):
+def assign_variables(ans, ques, cont, prompt, promptSub):
     returned_ans = ans
     returned_ques = ques
     returned_cont = cont
+    promptSub = promptSub
 
     # Check and define f_custom_function based on variable values
     if returned_ans is not None and returned_ques is not None and returned_cont is not None:
@@ -156,7 +157,7 @@ def assign_variables(ans, ques, cont):
     feedbacks=[f_custom_function])
 
     with tru_recorder as recording:
-        llm_response = chain.invoke("What is non accrual loan ")
+        llm_response = chain.invoke(prompt)
 
 
     tru=Tru()
@@ -199,9 +200,11 @@ st.subheader("Check the Groundtruth",divider=False)
 answer = st.checkbox("Answer")
 question = st.checkbox("Question")
 context = st.checkbox("Context")
-prompt = st.checkbox("Prompt")
-if prompt:
+promptSub = st.checkbox("Prompt")
+if promptSub:
     st.text_input("Prompt",placeholder='Please Enter the Prompt', key = 'givenPrompt')
+mainPrompt = st.text_input("Main Prompt",placeholder='Please Enter the Prompt', key = 'mainPrompt')
+
 submitted_btn = st.button("Evaluate with Custom Metrics", use_container_width=True, type="secondary")
 
 
@@ -212,19 +215,23 @@ if submitted_btn:
         ques = 'ok'
     if context:
         cont = 'ok'
-    if prompt:
-        prompt = st.session_state.givenPrompt
+    if promptSub:
+        promptSub = st.session_state.givenPrompt
+        
+    prompt = st.session_state.mainPrompt
         
         
-    rec = assign_variables(ans, ques, cont, prompt)
+    # rec = assign_variables(ans, ques, cont, prompt, promptSub)
     
-    for feedback, feedback_result in rec.wait_for_feedback_results().items():
-        st.write(feedback.name, feedback_result.result)
+    # for feedback, feedback_result in rec.wait_for_feedback_results().items():
+    #     st.write(feedback.name, feedback_result.result)
         
     st.write("Answer: ", ans)
     st.write("Question: ", ques)
     st.write("Context: ", cont)
-    st.write("Prompt: ", prompt)
+    st.write("Sub Prompt: ", promptSub)
+    st.write("Main Prompt: ", prompt)
+    
     
 
 st.write("")
